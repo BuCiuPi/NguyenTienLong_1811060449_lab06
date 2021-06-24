@@ -66,8 +66,34 @@ namespace NguyenTienLong_1811060449_lab06.Controllers
             book dbUpdate = context.books.FirstOrDefault(p => p.ID == book.ID);
             if (dbUpdate != null)
             {
-                context.books.AddOrUpdate(book); 
+                context.books.AddOrUpdate(dbUpdate); 
                 context.SaveChanges();
+            }
+
+            return View("ListBook", context.books.ToList());
+        }
+
+        public ActionResult Delete(int id)
+        {
+            BookManagerContext context = new BookManagerContext();
+            book book = context.books.FirstOrDefault(p => p.ID == id);
+            return View(book);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(book book)
+        {
+
+            //Sử dụng context để làm việc với các class
+            BookManagerContext context = new BookManagerContext();
+
+            book dbUpdate = context.books.FirstOrDefault(p => p.ID == book.ID);
+            if (dbUpdate != null)
+            {
+                context.books.Remove(dbUpdate);
+                context.SaveChanges();
+
             }
 
             return View("ListBook", context.books.ToList());
